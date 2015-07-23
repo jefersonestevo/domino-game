@@ -43,6 +43,14 @@ public class Domino implements Serializable, Comparable {
         return downValue;
     }
 
+    public Integer getSummedValue() {
+        return upValue + downValue;
+    }
+
+    public boolean isSameValue() {
+        return upValue.equals(downValue);
+    }
+
     @Override
     public int compareTo(Object o) {
         Domino other = (Domino)o;
@@ -51,5 +59,10 @@ public class Domino implements Serializable, Comparable {
             compare = other.downValue.compareTo(this.downValue);
         }
         return compare;
+    }
+
+    @Override
+    public String toString() {
+        return getId();
     }
 }

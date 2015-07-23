@@ -6,21 +6,21 @@ import java.util.List;
 
 public class Round implements Serializable {
     private Integer number;
-    private List<PlayerMove> playerMoves;
+    private List<PlayerMove> playerMoves = new ArrayList<PlayerMove>();
+
+    public Round(Integer number) {
+        this.number = number;
+    }
 
     public Integer getNumber() {
         return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
     }
 
     public List<PlayerMove> getPlayerMoves() {
         return new ArrayList<PlayerMove>(playerMoves);
     }
 
-    public void setPlayerMoves(List<PlayerMove> playerMoves) {
-        this.playerMoves = playerMoves;
+    public void addPlayerMove(PlayerMove playerMove) {
+        this.playerMoves.add(playerMove);
     }
 }

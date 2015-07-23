@@ -6,6 +6,11 @@ public class Player implements Serializable {
     private String id;
     private String nickName;
 
+    public Player(String id, String nickName) {
+        this.id = id;
+        this.nickName = nickName;
+    }
+
     public String getId() {
         return id;
     }
@@ -20,5 +25,13 @@ public class Player implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", nickName='" + nickName + '\'' +
+                '}';
     }
 }

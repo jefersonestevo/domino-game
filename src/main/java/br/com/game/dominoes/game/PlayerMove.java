@@ -9,7 +9,16 @@ public class PlayerMove implements Serializable {
     private PlayerInGame playerInGame;
     private Domino domino;
     private GameSide gameSide;
-    boolean passed;
+    private boolean passed = false;
+
+    public PlayerMove() {
+        this.passed = true;
+    }
+
+    public PlayerMove(Domino domino, GameSide gameSide) {
+        this.domino = domino;
+        this.gameSide = gameSide;
+    }
 
     public PlayerInGame getPlayerInGame() {
         return playerInGame;
@@ -21,10 +30,6 @@ public class PlayerMove implements Serializable {
 
     public Domino getDomino() {
         return domino;
-    }
-
-    public void setDomino(Domino domino) {
-        this.domino = domino;
     }
 
     public GameSide getGameSide() {
@@ -41,5 +46,15 @@ public class PlayerMove implements Serializable {
 
     public void setPassed(boolean passed) {
         this.passed = passed;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerMove{" +
+                "playerInGame=" + playerInGame +
+                ", domino=" + domino +
+                ", gameSide=" + gameSide +
+                ", passed=" + passed +
+                '}';
     }
 }

@@ -7,12 +7,13 @@ public class DominoWithExposedSide {
     private Domino domino;
     private GameSide exposedSide;
 
-    public Domino getDomino() {
-        return domino;
+    public DominoWithExposedSide(Domino domino, GameSide exposedSide) {
+        this.domino = domino;
+        this.exposedSide = exposedSide;
     }
 
-    public void setDomino(Domino domino) {
-        this.domino = domino;
+    public Domino getDomino() {
+        return domino;
     }
 
     public GameSide getExposedSide() {
@@ -22,4 +23,5 @@ public class DominoWithExposedSide {
     public void setExposedSide(GameSide exposedSide) {
         this.exposedSide = exposedSide;
     }
+
 }
