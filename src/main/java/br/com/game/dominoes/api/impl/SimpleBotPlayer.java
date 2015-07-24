@@ -26,6 +26,7 @@ public class SimpleBotPlayer extends PlayerInGame {
     private class SimpleBotPlayerStrategy implements PlayerStrategy {
         @Override
         public PlayerMove play(int topValue, int downValue) {
+            // TODO - Improve intelligence
             for (Domino domino : getHand()) {
                 if (domino.getUpValue().equals(topValue) || domino.getDownValue().equals(topValue)) {
                     return playAMove(domino, GameSide.UP);
@@ -34,7 +35,6 @@ public class SimpleBotPlayer extends PlayerInGame {
                     return playAMove(domino, GameSide.DOWN);
                 }
             }
-            // TODO
             return new PlayerMove();
         }
 
@@ -44,11 +44,7 @@ public class SimpleBotPlayer extends PlayerInGame {
             int highestValue = Integer.MIN_VALUE;
             for (Domino domino : getHand()) {
                 if (domino.getSummedValue() > highestValue) {
-                    if (highest == null) {
-                        highest = domino;
-                        highestValue = domino.getSummedValue();
-                    }
-                    else if (highest.isSameValue() && !domino.isSameValue()) {
+                    if (highest == null || !highest.isSameValue() || domino.isSameValue()) {
                         highest = domino;
                         highestValue = domino.getSummedValue();
                     }
@@ -59,6 +55,11 @@ public class SimpleBotPlayer extends PlayerInGame {
 
         @Override
         public void notifyPlayerMove(PlayerMove playerMove, int topValue, int downValue) {
+
+        }
+
+        @Override
+        public void notifyPlayerHasBoughtADomino(PlayerInGame playerInGame) {
 
         }
     }

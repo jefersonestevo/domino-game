@@ -68,39 +68,44 @@ public class Game implements Serializable {
             }
 
             Round round = new Round(rounds.size() + 1);
-            log("Starting round {}", round.getNumber());
+            log("======Starting round {}======", round.getNumber());
             for (int i = 0; i < players.size(); i++) {
                 PlayerInGame player = getNextPlayer();
                 int[] exposedValues = getExposedValuesInTable();
-                log("Player {} is gonna play on upValue={} and downValue={}", player.getPlayer().getNickName(),
+                log(" >> Player {}: upValue={}, downValue={}", player.getPlayer().getNickName(),
                         exposedValues[0], exposedValues[1]);
                 PlayerMove move = makePlayerMove(player, exposedValues[0], exposedValues[1]);
-                // TODO - Check if the rules let buy dominos and buy it
                 notifyPlayerMove(player, move);
                 round.addPlayerMove(move);
-                log("Table:");
+                log("  Table:");
                 for (int j = this.table.size() - 1; j >= 0; j--) {
                     DominoWithExposedSide dominoes = this.table.get(j);
                     log("   {}", dominoes.getDomino().getId());
                 }
             }
+            log("======Ending round {}======", round.getNumber());
             lastRound = round;
             this.rounds.add(round);
         }
 
-        log("Winner = {}", winner);
+        log(" >> Winner = {}", winner);
     }
 
     protected PlayerMove makePlayerMove(PlayerInGame player, int exposedValueUp, int exposedValueDown) {
         PlayerMove move = player.getStrategy().play(exposedValueUp, exposedValueDown);
         move.setPlayerInGame(player);
-        log("Player move={}", move);
+        log(" >> Player {}: move={}", player.getPlayer().getNickName(), move);
         if (move.isPassed()) {
-            log("Player ({}) passed the move", player);
+            log(" >> Player {}: passed", player.getPlayer().getNickName());
             if (gameRules.isCanBuy() && this.extraDominoes.size() > 0) {
-                log("Player ({}) will buy a new domino", player);
+                log(" >> Player {}: bought a new domino", player.getPlayer().getNickName());
                 Domino domino = this.extraDominoes.pollFirst();
                 player.giveDominoToHand(domino);
+                for (PlayerInGame playerInGame : players) {
+                    if (!player.equals(playerInGame)) {
+                        playerInGame.getStrategy().notifyPlayerHasBoughtADomino(player);
+                    }
+                }
                 return makePlayerMove(player, exposedValueUp, exposedValueDown);
             }
         } else {
@@ -123,7 +128,7 @@ public class Game implements Serializable {
         extraDominoes = shuffledDominoes;
 
         for (PlayerInGame player : players) {
-            log("Player {} with hand: ", player.getPlayer().getNickName());
+            log(" >> Player {} with hand: ", player.getPlayer().getNickName());
             for (Domino domino : player.getHand()) {
                 log("   {}", domino.getId());
             }
@@ -167,7 +172,6 @@ public class Game implements Serializable {
     }
 
     protected void firstMove() {
-        log("Game First Move");
         PlayerMove highestMove = null;
         int highestValue = Integer.MIN_VALUE;
         for (PlayerInGame player : players) {
@@ -186,20 +190,6 @@ public class Game implements Serializable {
         highestMove.setGameSide(GameSide.BOTH);
         highestMove.setPlayerInGame(player);
         addMoveToTable(highestMove);
-
-//        for (int i = 0; i < players.size(); i++) {
-//            PlayerInGame player = players.get(i);
-//            PlayerMove move = player.getStrategy().getHighestDomino();
-//            if (move != null) {
-//                log("Player ({}) has the first move with domino ({})", player.getPlayer().getNickName(),
-//                        move.getDomino().getId());
-//                lastPlayer = i;
-//                move.setGameSide(GameSide.BOTH);
-//                move.setPlayerInGame(player);
-//                addMoveToTable(move);
-//                return;
-//            }
-//        }
     }
 
     protected boolean hasWinner() {
